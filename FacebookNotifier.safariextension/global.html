@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>FacebookNotifier</title>
+<script type="text/javascript">    
+    checkFacebookNotifications();
+    var freq = parseInt(safari.extension.settings.frequency * 1000, 10);
+    setInterval(checkFacebookNotifications, freq);
+    
+    safari.application.addEventListener("message", respondToMessage, false);
+    safari.application.addEventListener("command", get, false);
+    
+    function checkFacebookNotifications() {
+        var notificationsCount = 0;
+        var request = new XMLHttpRequest();
+        request.open("GET", "https://www.facebook.com/legal/terms/");
+        request.onreadystatechange = function() {
+            if (request.readyState != 4) return;
+            var response = request.responseText;
+            try {
+                var messages = response.match(new RegExp(/id="mercurymessagesCountValue">([^<]*)/));
+                notificationsCount += parseInt(messages[1], 10);
+                
+                var notifications = response.match(new RegExp(/id="notificationsCountValue">([^<]*)/));
+                notificationsCount += parseInt(notifications[1], 10);
+                
+                var friendRequests = response.match(new RegExp(/id="requestsCountValue">([^<]*)/));
+                notificationsCount += parseInt(friendRequests[1], 10);
+                                
+                updateFacebookNotificationCount(notificationsCount);
+            } catch (err) {
+                // Error
+            }
+        };
+        request.send();
+    }
+    
+    function updateFacebookNotificationCount(count) {
+        for (var i=0; i < safari.extension.toolbarItems.length; i++) {
+            safari.extension.toolbarItems[i].badge = count;
+        };
+    }
+    
+    function get() { 
+        if (is_facebook_open()) {
+            return;
+        }
+        
+        if (safari.application.activeBrowserWindow.activeTab.url == undefined) {
+            if (safari.extension.settings.onclick == "home"){
+                if (safari.extension.settings.shownews == "mostrecent") {
+                    safari.application.activeBrowserWindow.activeTab.url = "http://www.facebook.com/?sk=h_chr";
+                } else {
+                    safari.application.activeBrowserWindow.activeTab.url = "http://www.facebook.com/";
+                }
+            } else if (safari.extension.settings.onclick == "notifications"){
+                safari.application.activeBrowserWindow.activeTab.url = "http://www.facebook.com/notifications.php";
+            }
+        } else {
+            if (safari.extension.settings.onclick == "home"){
+                if (safari.extension.settings.shownews == "mostrecent") {
+                    safari.application.activeBrowserWindow.openTab().url = "http://www.facebook.com/?sk=h_chr";
+                } else {
+                    safari.application.activeBrowserWindow.openTab().url = "http://www.facebook.com/";
+                }
+            } else if (safari.extension.settings.onclick == "notifications"){
+                safari.application.activeBrowserWindow.openTab().url = "http://www.facebook.com/notifications.php";
+            }
+        }
+    }
+    
+    function is_facebook_open() {
+        var currentTabs = safari.application.activeBrowserWindow.tabs;
+        var curTab;
+        
+        for (var i=0; i < currentTabs.length; i++) {
+            curTab = currentTabs[i];
+            if (curTab.url.match(/http:\/\/www\.facebook\.com/)) {
+                curTab.activate();
+                return true;
+            }
+        }
+        
+        return false;
+    }            
+    
+    
+    function respondToMessage(messageEvent) {
+        if (messageEvent.name == "getSettingValue") {
+            var value = safari.extension.settings.getItem(messageEvent.message);
+            safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("settingValueIs", value);
+        } 
+    }    
+</script>
+</head>
+<body>
+</body>
+</html>

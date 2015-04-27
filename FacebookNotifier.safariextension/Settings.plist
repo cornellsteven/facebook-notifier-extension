@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+    <dict>
+        <key>DefaultValue</key>
+        <string>home</string>
+        <key>Key</key>
+        <string>onclick</string>
+        <key>Title</key>
+        <string>On click</string>
+        <key>Titles</key>
+        <array>
+            <string>www.facebook.com</string>
+            <string>www.facebook.com/notifications.php</string>
+        </array>
+        <key>Type</key>
+        <string>PopUpButton</string>
+        <key>Values</key>
+        <array>
+            <string>home</string>
+            <string>notifications</string>
+        </array>
+    </dict>
+    <dict>
+        <key>Type</key>
+        <string>Separator</string>
+    </dict>
+    <dict>
+        <key>DefaultValue</key>
+        <string>topnews</string>
+        <key>Key</key>
+        <string>shownews</string>
+        <key>Title</key>
+        <string>Initial stream</string>
+        <key>Titles</key>
+        <array>
+            <string>Top News</string>
+            <string>Most Recent</string>
+        </array>
+        <key>Type</key>
+        <string>PopUpButton</string>
+        <key>Values</key>
+        <array>
+            <string>topnews</string>
+            <string>mostrecent</string>
+        </array>
+    </dict>
+    <dict>
+        <key>DefaultValue</key>
+        <real>5</real>
+        <key>Key</key>
+        <string>frequency</string>
+        <key>Title</key>
+        <string>Frequency</string>
+        <key>Titles</key>
+        <array>
+            <string>Default (5 seconds)</string>
+            <string>1 minute</string>
+            <string>5 minutes</string>
+        </array>
+        <key>Type</key>
+        <string>PopUpButton</string>
+        <key>Values</key>
+        <array>
+            <real>5</real>
+            <real>60</real>
+            <real>300</real>
+        </array>
+    </dict>
+</array>
+</plist>
